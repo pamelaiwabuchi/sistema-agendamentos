@@ -115,6 +115,7 @@
             msg.className = "mt-4 p-4 rounded text-center font-bold bg-green-100 text-green-800 block";
             msg.innerHTML = `Confirmado!<br>${payload.nome}<br>${payload.data_hora}`;
             buscarHorarios(); // Atualiza a grade para bloquear o horário escolhido
+            horaSel = null;
         } else {
             const data = await res.json();
             alert(data.erro || "Erro ao agendar.");
