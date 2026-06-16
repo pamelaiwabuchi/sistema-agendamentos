@@ -81,10 +81,16 @@
                     } else {
                         btn.className = 'p-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition';
                         btn.onclick = () => { 
-                            horaSel = h + ":00"; 
-                            document.querySelectorAll('#grade button').forEach(b => b.classList.remove('bg-blue-600', 'text-white')); 
-                            btn.classList.add('bg-blue-600', 'text-white'); 
-                        };
+                        horaSel = h + ":00"; 
+                        
+                        document.querySelectorAll('#grade button').forEach(b => {
+                            b.classList.remove('bg-blue-600', 'text-white');
+                            b.classList.add('text-blue-600');
+                        });
+                        
+                        btn.classList.remove('text-blue-600');
+                        btn.classList.add('bg-blue-600', 'text-white');
+                    };
                     }
                     grade.appendChild(btn);
                 });
