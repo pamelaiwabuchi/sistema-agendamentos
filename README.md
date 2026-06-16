@@ -33,6 +33,22 @@ Git: Para clonar o repositório.
 
 ## Como executar (Guia do Usuário)
 
+Se você deseja executar o sistema diretamente através da imagem publicada no Docker Hub, sem a necessidade de clonar o repositório ou realizar o build local, utilize os comandos abaixo em seu terminal:
+
+Inicie o banco de dados:
+```
+Bash
+docker run -d --name mysql-db -e MYSQL_ROOT_PASSWORD=suasenha mysql:8.0
+```
+Inicie a aplicação:
+```
+Bash
+docker run -d --name app-agendamento -p 5001:5000 --link mysql-db:db pamelaiwabuchi/sistema-agendamento-salao:latest
+```
+Nota: Certifique-se de que a porta 5001 esteja disponível em sua máquina. O sistema estará acessível em http://localhost:5001.
+
+Caso você prefira clonar o repositório e acessar localmente:
+
 1. Clone o repositório
 ```bash
 git clone https://github.com/pamelaiwabuchi/sistema-agendamentos.git
@@ -63,5 +79,7 @@ O sistema implementa **Volumes Docker** para a persistência de dados. Isso gara
 ## Ambiente de Deploy
 
 O projeto está hospedado em uma instância da AWS (Amazon Web Services). A arquitetura em containers permite que a aplicação seja escalável e pronta para execução em ambiente de produção, mantendo a paridade com o ambiente local. 
+
+Para instruções de uso do sistema, consulte o Guia do Usuário.
 
 *Desenvolvido como parte das atividades práticas da matéria de Desenvolvimento web - FATEC.*
