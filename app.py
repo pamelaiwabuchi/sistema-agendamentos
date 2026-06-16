@@ -44,7 +44,6 @@ def agendar():
     db = conectar_banco()
     cursor = db.cursor()
     try:
-        # Colunas corrigidas para cli_nome e cli_email
         query = "INSERT INTO agendamentos (cli_nome, cli_email, prof_id, data_hora) VALUES (%s, %s, %s, %s)"
         cursor.execute(query, (dados['nome'], dados['email'], dados['profissional_id'], dados['data_hora']))
         db.commit()
