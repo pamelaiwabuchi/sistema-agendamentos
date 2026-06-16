@@ -79,7 +79,7 @@
                         btn.disabled = true;
                         btn.className = 'p-2 bg-gray-300 text-gray-500 border border-gray-400 rounded cursor-not-allowed';
                     } else {
-                        btn.className = 'p-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-600';
+                        btn.className = 'p-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition';
                         btn.onclick = () => { 
                             horaSel = h + ":00"; 
                             document.querySelectorAll('#grade button').forEach(b => b.classList.remove('bg-blue-600', 'text-white')); 
