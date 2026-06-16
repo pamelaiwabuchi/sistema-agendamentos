@@ -36,13 +36,11 @@ Git: Para clonar o repositório.
 Se você deseja executar o sistema diretamente através da imagem publicada no Docker Hub, sem a necessidade de clonar o repositório ou realizar o build local, utilize os comandos abaixo em seu terminal:
 
 Inicie o banco de dados:
-```
-Bash
+``` Bash
 docker run -d --name mysql-db -e MYSQL_ROOT_PASSWORD=suasenha mysql:8.0
 ```
 Inicie a aplicação:
-```
-Bash
+``` Bash
 docker run -d --name app-agendamento -p 5001:5000 --link mysql-db:db pamelaiwabuchi/sistema-agendamento-salao:latest
 ```
 Nota: Certifique-se de que a porta 5001 esteja disponível em sua máquina. O sistema estará acessível em http://localhost:5001.
