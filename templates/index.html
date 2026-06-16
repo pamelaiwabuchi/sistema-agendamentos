@@ -41,79 +41,87 @@
         <div id="mensagem" class="mt-4 p-4 rounded hidden text-center font-bold"></div>
     </div>
 
-    <script>
-        const API = '';
-let horaSel = null; // Adicione esta linha de volta
+ <script>
+    let horaSel = null;
+    const API = ''; // URL relativa para funcionar em qualquer ambiente
 
-function carregar() {
-    fetch(API + '/profissionais')
-        .then(res => res.json())
-        .then(dados => {
-            const sel = document.getElementById('profissional');
-            // Mudei para mostrar nome e especialidade conforme seu código original
-            dados.forEach(p => sel.innerHTML += `<option value="${p.prof_id}">${p.prof_nome} (${p.prof_especialidade})</option>`);
-        });
-}
-
-function buscarHorarios() {
-    const prof = document.getElementById('profissional').value;
-    const data = document.getElementById('data').value;
-    if(!prof || !data) return;
-
-    fetch(`${API}/horarios-ocupados?profissional_id=${prof}&data=${data}`)
-        .then(res => res.json())
-        .then(ocupados => {
-            const grade = document.getElementById('grade');
-            grade.innerHTML = '';
-            ["13:00", "14:00", "15:00"].forEach(h => {
-                const btn = document.createElement('button');
-                btn.type = "button"; // Importante para não recarregar a página
-                btn.textContent = h;
-                btn.className = "p-2 border border-blue-500 rounded"; // Adicionei uma classe básica
-                
-                if(ocupados.includes(h + ":00")) {
-                    btn.disabled = true;
-                    btn.style.backgroundColor = 'gray';
-                } else {
-                    btn.onclick = () => { 
-                        horaSel = h + ":00"; 
-                        // Feedback visual simples
-                        document.querySelectorAll('#grade button').forEach(b => b.style.backgroundColor = '');
-                        btn.style.backgroundColor = 'blue';
-                        btn.style.color = 'white';
-                    };
-                }
-                grade.appendChild(btn);
+    // 1. Carrega os profissionais no select
+    function carregar() {
+        fetch(API + '/profissionais')
+            .then(res => res.json())
+            .then(dados => {
+                const sel = document.getElementById('profissional');
+                sel.innerHTML = '<option value="">Selecione...</option>';
+                dados.forEach(p => {
+                    sel.innerHTML += `<option value="${p.prof_id}">${p.prof_nome} (${p.prof_especialidade})</option>`;
+                });
             });
-        });
-}
-
-// 3. A função enviar que estava faltando
-async function enviar() {
-    const payload = {
-        nome: document.getElementById('nome').value,
-        email: document.getElementById('email').value,
-        profissional_id: document.getElementById('profissional').value,
-        data_hora: `${document.getElementById('data').value} ${horaSel}`
-    };
-    
-    if(!payload.nome || !payload.profissional_id || !horaSel) return alert("Preencha todos os campos e selecione um horário!");
-
-    const res = await fetch(API + '/agendar', { 
-        method: 'POST', 
-        headers: {'Content-Type': 'application/json'}, 
-        body: JSON.stringify(payload) 
-    });
-    
-    if(res.ok) {
-        alert("Agendamento confirmado!");
-        buscarHorarios(); // Atualiza a grade
-    } else {
-        alert("Erro ao agendar.");
     }
-}
 
-carregar();
-    </script>
+    // 2. Busca e desenha os botões de horário
+    function buscarHorarios() {
+        const prof = document.getElementById('profissional').value;
+        const data = document.getElementById('data').value;
+        if(!prof || !data) return;
+
+        fetch(`${API}/horarios-ocupados?profissional_id=${prof}&data=${data}`)
+            .then(res => res.json())
+            .then(ocupados => {
+                const grade = document.getElementById('grade');
+                grade.innerHTML = '';
+                
+                ["13:00", "14:00", "15:00"].forEach(h => {
+                    const btn = document.createElement('button');
+                    btn.type = "button";
+                    btn.textContent = h;
+                    
+                    if(ocupados.includes(h + ":00")) {
+                        btn.disabled = true;
+                        btn.className = 'p-2 bg-gray-300 text-gray-500 border border-gray-400 rounded cursor-not-allowed';
+                    } else {
+                        btn.className = 'p-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition';
+                        btn.onclick = () => { 
+                            horaSel = h + ":00"; 
+                            document.querySelectorAll('#grade button').forEach(b => b.classList.remove('bg-blue-600', 'text-white')); 
+                            btn.classList.add('bg-blue-600', 'text-white'); 
+                        };
+                    }
+                    grade.appendChild(btn);
+                });
+            });
+    }
+
+    // 3. Envia o formulário e exibe a mensagem
+    async function enviar() {
+        const payload = {
+            nome: document.getElementById('nome').value,
+            email: document.getElementById('email').value,
+            profissional_id: document.getElementById('profissional').value,
+            data_hora: `${document.getElementById('data').value} ${horaSel}`
+        };
+
+        if(!payload.nome || !payload.email || !payload.profissional_id || !horaSel) {
+            return alert("Preencha todos os campos e selecione um horário!");
+        }
+
+        const res = await fetch(API + '/agendar', { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(payload) 
+        });
+
+        const msg = document.getElementById('mensagem');
+        if(res.status === 201) {
+            msg.className = "mt-4 p-4 rounded text-center font-bold bg-green-100 text-green-800 block";
+            msg.innerHTML = `Confirmado!<br>${payload.nome}<br>${payload.data_hora}`;
+            buscarHorarios(); // Atualiza a grade para bloquear o horário escolhido
+        } else {
+            const data = await res.json();
+            alert(data.erro || "Erro ao agendar.");
+        }
+    }
+
+    carregar();
+</script>
 </body>
 </html>
