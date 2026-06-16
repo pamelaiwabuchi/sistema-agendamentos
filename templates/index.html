@@ -79,7 +79,7 @@
                         btn.disabled = true;
                         btn.className = 'p-2 bg-gray-300 text-gray-500 border border-gray-400 rounded cursor-not-allowed';
                     } else {
-                        btn.className = 'p-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition';
+                        btn.className = 'p-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-600';
                         btn.onclick = () => { 
                             horaSel = h + ":00"; 
                             document.querySelectorAll('#grade button').forEach(b => b.classList.remove('bg-blue-600', 'text-white')); 
@@ -115,7 +115,6 @@
             msg.className = "mt-4 p-4 rounded text-center font-bold bg-green-100 text-green-800 block";
             msg.innerHTML = `Confirmado!<br>${payload.nome}<br>${payload.data_hora}`;
             buscarHorarios(); // Atualiza a grade para bloquear o horário escolhido
-            horaSel = null;
         } else {
             const data = await res.json();
             alert(data.erro || "Erro ao agendar.");
