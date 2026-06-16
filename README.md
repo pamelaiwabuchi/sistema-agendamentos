@@ -33,42 +33,27 @@ Git: Para clonar o repositório.
 
 ## Como executar (Guia do Usuário)
 
-Se você deseja executar o sistema diretamente através da imagem publicada no Docker Hub, sem a necessidade de clonar o repositório ou realizar o build local, utilize os comandos abaixo em seu terminal:
+Opção 1: Ideal para visualizar o código e realizar alterações.
 
-Inicie o banco de dados:
-``` Bash
-docker run -d --name mysql-db -e MYSQL_ROOT_PASSWORD=suasenha mysql:8.0
-```
-Inicie a aplicação:
-``` Bash
-docker run -d --name app-agendamento -p 5001:5000 --link mysql-db:db pamelaiwabuchi/sistema-agendamento-salao:latest
-```
-Nota: Certifique-se de que a porta 5001 esteja disponível em sua máquina. O sistema estará acessível em http://localhost:5001.
-
-Caso você prefira clonar o repositório e acessar localmente:
-
-1. Clone o repositório
 ```bash
 git clone https://github.com/pamelaiwabuchi/sistema-agendamentos.git
 cd sistema-agendamentos
-```
-2. Configure as variáveis de ambiente
-Este projeto utiliza um arquivo de configuração para gerenciar as credenciais do banco de dados.
-```bash
 cp .env.example .env
-```
-Abra o arquivo .env com um editor de texto de sua preferência e preencha o campo DB_PASSWORD com a senha desejada para o banco de dados.
-
-3. Suba o sistema
-```bash
-docker compose up -d --build
-#ou, dependendo da sua versão:
+# Edite o .env com sua senha
 docker-compose up -d --build
 ```
 
-4. Acesse a aplicação:
+Opção 2: Execução Rápida (Produção/Docker Hub)
+Ideal para rodar o sistema rapidamente utilizando a imagem oficial.
 
-O sistema estará disponível em: http://localhost:5001
+```bash
+git clone https://github.com/pamelaiwabuchi/sistema-agendamentos.git
+cd sistema-agendamentos
+cp .env.example .env
+# Edite o .env com sua senha
+docker-compose pull
+docker-compose up -d
+```
 
 ## Persistência de Dados
 
