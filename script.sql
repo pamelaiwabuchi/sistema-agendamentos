@@ -9,12 +9,14 @@ CREATE TABLE IF NOT EXISTS profissionais (
 
 CREATE TABLE IF NOT EXISTS agendamentos (
     agend_id INT AUTO_INCREMENT PRIMARY KEY,
+    cli_nome VARCHAR(100) NOT NULL,
+    cli_email VARCHAR(100) NOT NULL,
     prof_id INT NOT NULL,
-    cli_id INT NOT NULL,
     data_hora DATETIME NOT NULL,
     FOREIGN KEY (prof_id) REFERENCES profissionais(prof_id)
 );
 
 INSERT INTO profissionais (prof_nome, prof_especialidade) VALUES
 ('Ana Silva', 'Cabelo'),
+('Carlos Souza', 'Barba'),
 ('Mariana Costa', 'Manicure');
