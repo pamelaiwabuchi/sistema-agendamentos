@@ -2,6 +2,23 @@
 
 Este sistema permite o agendamento de horários para profissionais, com persistência de dados em banco MySQL e arquitetura baseada em containers Docker.
 
+## Estrutura do Projeto
+
+```
+├── 📁 static
+├── 📁 templates
+│   └── 🌐 index.html
+├── ⚙️ .env.example
+├── ⚙️ .gitignore
+├── 🐳 Dockerfile
+├── 📝 README.md
+├── 🐍 app.py
+├── ⚙️ docker-compose.yml
+├── 📄 requirements.txt
+└── 📄 script.sql
+```
+---
+
 ## Tecnologias utilizadas
 - Backend: Python (Flask)
 - Banco de Dados: MySQL 8.0
