@@ -44,16 +44,23 @@ docker-compose up -d --build
 ```
 
 Opção 2: Execução Rápida (Produção/Docker Hub)
-Ideal para rodar o sistema rapidamente utilizando a imagem oficial.
+Se você não deseja clonar o repositório, basta baixar apenas o arquivo docker-compose.yml deste projeto, salvar em uma pasta local e executar:
 
-```bash
-git clone https://github.com/pamelaiwabuchi/sistema-agendamentos.git
-cd sistema-agendamentos
-cp .env.example .env
-# Edite o .env com sua senha
-docker-compose pull
-docker-compose up -d
-```
+docker network create rede-salao
+
+docker run -d --name mysql-db \
+  -e MYSQL_ROOT_PASSWORD=senha123 \
+  -e MYSQL_DATABASE=agendamentos_db \
+  --network rede-salao mysql:8.0
+
+docker run -d --name sistema-agendamento \
+  -p 5001:5001 \
+  --network rede-salao \
+  -e DB_HOST=mysql-db \
+  -e DB_PASSWORD=senha123 \
+  -e DB_USER=root \
+  -e DB_NAME=agendamentos_db \
+  pamelaiwabuchi/sistema-agendamento-salao:latest  
 
 ## Persistência de Dados
 
